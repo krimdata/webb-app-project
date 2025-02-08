@@ -3,34 +3,34 @@ name: Convert Text to PDF
 on:
   push:
     branches:
-      - main
+      - main  # ou votre branche par défaut
+  pull_request:
+    branches:
+      - main  # ou votre branche par défaut
 
 jobs:
-  convert_to_pdf:
-    runs-on: ubuntu-latest
-
+  convert-text-to-pdf:
+    runs-on: ubuntu-latest  # Utiliser une image Ubuntu pour l'installation de LaTeX
+    
     steps:
-      - name: 📥 Cloner le dépôt
-        uses: actions/checkout@v4
+      # Étape 1: Vérifier le code depuis le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: 🔧 Installer pandoc
-        run: sudo apt-get install -y pandoc
+      # Étape 2: Installer LaTeX
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-xetex texlive-fonts-recommended texlive-generic-recommended
 
-      - name: 📄 Convertir le fichier texte en PDF
-        run: pandoc requirements.txt -o document.pdf
+      # Étape 3: Convertir le fichier texte en PDF
+      - name: Convert text to PDF
+        run: |
+          pdflatex requirements.tex  # Assurez-vous que votre fichier texte est bien converti en fichier .tex
 
-      - name: 📤 Télécharger le fichier PDF en tant qu’artefact
+      # Étape 4: Télécharger le fichier PDF généré
+      - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: converted-pdf
-          path: document.pdf
-
-      - name: 🚀 Commit & push le PDF (optionnel)
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add document.pdf
-          git commit -m "Ajout du fichier PDF généré automatiquement"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: pdf-file
+          path: ./document.pdf  # Changez ceci en fonction de l'emplacement et du nom du fichier PDF généré
