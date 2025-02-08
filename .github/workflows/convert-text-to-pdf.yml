@@ -1,0 +1,36 @@
+name: Convert Text to PDF
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  convert_to_pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Cloner le dépôt
+        uses: actions/checkout@v4
+
+      - name: 🔧 Installer pandoc
+        run: sudo apt-get install -y pandoc
+
+      - name: 📄 Convertir le fichier texte en PDF
+        run: pandoc document.txt -o document.pdf
+
+      - name: 📤 Télécharger le fichier PDF en tant qu’artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: converted-pdf
+          path: document.pdf
+
+      - name: 🚀 Commit & push le PDF (optionnel)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add document.pdf
+          git commit -m "Ajout du fichier PDF généré automatiquement"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
