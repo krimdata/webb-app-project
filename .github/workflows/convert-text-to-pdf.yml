@@ -17,7 +17,7 @@ jobs:
         run: sudo apt-get install -y pandoc
 
       - name: 📄 Convertir le fichier texte en PDF
-        run: pandoc document.txt -o document.pdf
+        run: pandoc requirements.txt -o document.pdf
 
       - name: 📤 Télécharger le fichier PDF en tant qu’artefact
         uses: actions/upload-artifact@v4
