@@ -21,7 +21,7 @@ jobs:
       - name: Install LaTeX
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-xetex texlive-fonts-recommended texlive-generic-recommended
+          sudo apt-get install -y texlive-full  # Installer l'ensemble complet de TeX Live
 
       # Étape 3: Convertir le fichier texte en PDF
       - name: Convert text to PDF
@@ -34,3 +34,4 @@ jobs:
         with:
           name: pdf-file
           path: ./document.pdf  # Changez ceci en fonction de l'emplacement et du nom du fichier PDF généré
+
